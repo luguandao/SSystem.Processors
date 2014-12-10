@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SSystem.Processors
 {
+    /// <summary>
+    /// type of timer
+    /// </summary>
     public enum PerTimerType
     {
         Once,
