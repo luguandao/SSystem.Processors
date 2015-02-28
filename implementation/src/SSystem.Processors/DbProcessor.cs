@@ -10,14 +10,14 @@ namespace SSystem.Processors
     /// </summary>
     public abstract class DbProcessor : Processor
     {
-        private DbProviderFactory m_cacheFactory;
+        private DbProviderFactory m_CacheFactory;
         public int ExecuteTimeoutBySecond { get; set; }
 
         public int ExecuteNonQuery(IDbCommand icom)
         {
             if (icom.Connection == null)
             {
-                icom.Connection = GetConnection();
+                icom.Connection = CreateConnection();
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
             return icom.ExecuteNonQuery();
@@ -27,25 +27,25 @@ namespace SSystem.Processors
         {
             if (icom.Connection == null)
             {
-                icom.Connection = GetConnection();
+                icom.Connection = CreateConnection();
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
             return icom.ExecuteScalar();
         }
 
-        public DataSet GetDataSet(IDbCommand icom, string providerName)
+        public DataSet QueryDataSet(IDbCommand icom, string providerName)
         {
             if (icom.Connection == null)
             {
-                icom.Connection = GetConnection();
+                icom.Connection = CreateConnection();
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
 
-            DbProviderFactory dbfactory = GetDbProviderFactory(icom.Connection.ConnectionString, providerName);
+            DbProviderFactory dbfactory = CreateDbProviderFactory(icom.Connection.ConnectionString, providerName);
             DbDataAdapter dbd = null;
             try
             {
-                dbd = GetDbDataAdapter(icom, dbfactory) as DbDataAdapter;
+                dbd = QueryDbDataAdapter(icom, dbfactory) as DbDataAdapter;
             }
             catch
             {
@@ -64,11 +64,11 @@ namespace SSystem.Processors
             return ds;
         }
 
-        public IDataReader GetDataReader(IDbCommand iCom)
+        public IDataReader QueryDataReader(IDbCommand iCom)
         {
             if (iCom.Connection == null)
             {
-                iCom.Connection = GetConnection();
+                iCom.Connection = CreateConnection();
             }
             IDbConnection iCon = iCom.Connection;
             bool manualopen = false;
@@ -96,14 +96,14 @@ namespace SSystem.Processors
             }
         }
 
-        public DbProviderFactory GetDbProviderFactory(string connectionString, string providerName)
+        public DbProviderFactory CreateDbProviderFactory(string connectionString, string providerName)
         {
-            m_cacheFactory = m_cacheFactory ?? DbProviderFactories.GetFactory(providerName);
+            m_CacheFactory = m_CacheFactory ?? DbProviderFactories.GetFactory(providerName);
 
-            return m_cacheFactory;
+            return m_CacheFactory;
         }
 
-        public IDbDataAdapter GetDbDataAdapter(IDbCommand iCom, DbProviderFactory df)
+        public IDbDataAdapter QueryDbDataAdapter(IDbCommand iCom, DbProviderFactory df)
         {
             DbDataAdapter da = df.CreateDataAdapter();
             da.SelectCommand = iCom as DbCommand;
@@ -122,9 +122,7 @@ namespace SSystem.Processors
 
         }
 
-        public IDbConnection GetConnection()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract IDbConnection CreateConnection();
+
     }
 }
