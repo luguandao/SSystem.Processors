@@ -13,7 +13,7 @@ namespace SSystem.Processors
         private DbProviderFactory m_CacheFactory;
         public int ExecuteTimeoutBySecond { get; set; }
 
-        public int ExecuteNonQuery(IDbCommand icom)
+        public virtual int ExecuteNonQuery(IDbCommand icom)
         {
             if (icom.Connection == null)
             {
@@ -23,7 +23,7 @@ namespace SSystem.Processors
             return icom.ExecuteNonQuery();
         }
 
-        public object ExecuteScalar(IDbCommand icom)
+        public virtual object ExecuteScalar(IDbCommand icom)
         {
             if (icom.Connection == null)
             {
@@ -33,7 +33,7 @@ namespace SSystem.Processors
             return icom.ExecuteScalar();
         }
 
-        public DataSet QueryDataSet(IDbCommand icom, string providerName)
+        public virtual DataSet QueryDataSet(IDbCommand icom, string providerName)
         {
             if (icom.Connection == null)
             {
@@ -64,7 +64,7 @@ namespace SSystem.Processors
             return ds;
         }
 
-        public IDataReader QueryDataReader(IDbCommand iCom)
+        public virtual IDataReader QueryDataReader(IDbCommand iCom)
         {
             if (iCom.Connection == null)
             {
@@ -96,14 +96,14 @@ namespace SSystem.Processors
             }
         }
 
-        public DbProviderFactory CreateDbProviderFactory(string connectionString, string providerName)
+        public virtual DbProviderFactory CreateDbProviderFactory(string connectionString, string providerName)
         {
             m_CacheFactory = m_CacheFactory ?? DbProviderFactories.GetFactory(providerName);
 
             return m_CacheFactory;
         }
 
-        public IDbDataAdapter QueryDbDataAdapter(IDbCommand iCom, DbProviderFactory df)
+        public virtual IDbDataAdapter QueryDbDataAdapter(IDbCommand iCom, DbProviderFactory df)
         {
             DbDataAdapter da = df.CreateDataAdapter();
             da.SelectCommand = iCom as DbCommand;
