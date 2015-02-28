@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbOperatorProcessor.cs" />
     <Compile Include="EventArgs\EstimateEventArgs.cs" />
     <Compile Include="EventArgs\ExceptionEventArgs.cs" />
     <Compile Include="EventArgs\TimerEventArgs.cs" />
