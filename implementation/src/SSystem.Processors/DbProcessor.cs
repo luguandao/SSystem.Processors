@@ -122,6 +122,15 @@ namespace SSystem.Processors
 
         }
 
+        public virtual IDbCommand CreateDbCommand()
+        {
+            IDbConnection icon = CreateConnection();
+            if (icon != null)
+                return icon.CreateCommand();
+            throw new NotImplementedException("请实现CreateConnection方法");
+
+        }
+
         public abstract IDbConnection CreateConnection();
 
     }
