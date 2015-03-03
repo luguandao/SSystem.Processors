@@ -13,6 +13,11 @@ namespace SSystem.Processors
         private DbProviderFactory m_CacheFactory;
         public int ExecuteTimeoutBySecond { get; set; }
 
+        protected DbProcessor()
+        {
+            ExecuteTimeoutBySecond = 30;
+        }
+
         public virtual int ExecuteNonQuery(IDbCommand icom)
         {
             if (icom.Connection == null)
