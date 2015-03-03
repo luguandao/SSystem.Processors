@@ -38,6 +38,21 @@ namespace SSystem.Processors
             return icom.ExecuteScalar();
         }
 
+        public virtual DataSet QueryDataSet(IDbCommand icom)
+        {
+            if (icom.Connection == null)
+            {
+                icom.Connection = CreateConnection();
+            }
+            icom.CommandTimeout = ExecuteTimeoutBySecond;
+            string[] arr = icom.Connection.GetType()
+                .FullName.Split(new char[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+            string providerName = string.Join(".", arr, 0, arr.Length - 1);
+
+            return QueryDataSet(icom, providerName);
+
+        }
+
         public virtual DataSet QueryDataSet(IDbCommand icom, string providerName)
         {
             if (icom.Connection == null)
