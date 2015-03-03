@@ -138,5 +138,13 @@ namespace SSystem.Processors
 
         public abstract IDbConnection CreateConnection();
 
+        public virtual IDbConnection CreateConnection(string connectionString, string providerName)
+        {
+            var dbProvider = CreateDbProviderFactory(connectionString, providerName);
+            if (dbProvider == null)
+                throw new Exception("无法生成DbProviderFactory");
+            return dbProvider.CreateConnection();
+        }
+
     }
 }
