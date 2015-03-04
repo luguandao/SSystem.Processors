@@ -46,7 +46,7 @@ namespace SSystem.Processors
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
             string[] arr = icom.Connection.GetType()
-                .FullName.Split(new char[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+                .FullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
             string providerName = string.Join(".", arr, 0, arr.Length - 1);
 
             return QueryDataSet(icom, providerName);
@@ -61,7 +61,7 @@ namespace SSystem.Processors
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
 
-            DbProviderFactory dbfactory = CreateDbProviderFactory(icom.Connection.ConnectionString, providerName);
+            DbProviderFactory dbfactory = CreateDbProviderFactory(providerName);
             DbDataAdapter dbd = null;
             try
             {
@@ -116,7 +116,7 @@ namespace SSystem.Processors
             }
         }
 
-        public virtual DbProviderFactory CreateDbProviderFactory(string connectionString, string providerName)
+        public virtual DbProviderFactory CreateDbProviderFactory(string providerName)
         {
             m_CacheFactory = m_CacheFactory ?? DbProviderFactories.GetFactory(providerName);
 
@@ -155,10 +155,12 @@ namespace SSystem.Processors
 
         public virtual IDbConnection CreateConnection(string connectionString, string providerName)
         {
-            var dbProvider = CreateDbProviderFactory(connectionString, providerName);
+            var dbProvider = CreateDbProviderFactory(providerName);
             if (dbProvider == null)
                 throw new Exception("无法生成DbProviderFactory");
-            return dbProvider.CreateConnection();
+            IDbConnection icon = dbProvider.CreateConnection();
+            icon.ConnectionString = connectionString;
+            return icon;
         }
 
     }
