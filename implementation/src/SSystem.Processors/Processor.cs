@@ -146,10 +146,7 @@ namespace SSystem.Processors
 
         protected virtual void OnEstimateRemains(int estimateRemainMilliseconds)
         {
-            if (EstimateRemains != null)
-            {
-                EstimateRemains(this, new EstimateEventArgs(estimateRemainMilliseconds));
-            }
+            EstimateRemains?.Invoke(this, new EstimateEventArgs(estimateRemainMilliseconds));
         }
 
         protected virtual void OnExceptionOccured(Exception ex)
@@ -175,13 +172,8 @@ namespace SSystem.Processors
 
         protected virtual void OnStatusChanged(StatusChangedEventArgs e)
         {
-            if (StatusChanged != null)
-            {
-                StatusChanged(this, e);
-            }
+            StatusChanged?.Invoke(this, e);
         }
-
-
 
         #endregion
 
@@ -272,10 +264,7 @@ namespace SSystem.Processors
         /// </summary>
         public void Stop()
         {
-            if (cancelSource != null)
-            {
-                cancelSource.Cancel();
-            }
+            cancelSource?.Cancel();
             m_processorCompletedEventArgs.StopExecuteNextProcessor = true;
             _Stop();
         }
