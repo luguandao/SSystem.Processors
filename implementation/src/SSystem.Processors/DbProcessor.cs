@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
 
@@ -161,6 +162,12 @@ namespace SSystem.Processors
             IDbConnection icon = dbProvider.CreateConnection();
             icon.ConnectionString = connectionString;
             return icon;
+        }
+
+        public virtual IDbConnection CreateConnection(string configDbName)
+        {
+            ConnectionStringSettings item = ConfigurationManager.ConnectionStrings[configDbName];
+            return CreateConnection(item.ConnectionString,item.ProviderName);
         }
 
     }
