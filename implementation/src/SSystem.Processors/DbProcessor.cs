@@ -36,7 +36,24 @@ namespace SSystem.Processors
                 icom.Connection = CreateConnection();
             }
             icom.CommandTimeout = ExecuteTimeoutBySecond;
-            return icom.ExecuteScalar();
+            icom.Connection.Open();
+            try
+            {
+                return icom.ExecuteScalar();
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                if (icom.Connection != null)
+                {
+                    icom.Connection.Close();
+                    icom.Connection.Dispose();
+                }
+            }
+           
         }
 
         public virtual DataSet QueryDataSet(IDbCommand icom)
